@@ -3,7 +3,8 @@ from collections import namedtuple
 
 import numpy as np
 
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.tree import DecisionTreeClassifier, export_graphviz
+import graphviz
 
 Dataset = namedtuple('TrainDataset', ['data', 'target', 'feature_names', 'target_names'])
 
@@ -43,16 +44,16 @@ def load_data(file_name: str, is_train_data):
         data = np.array(data)
 
         if is_train_data:
-            columns = columns[2:]
+            columns = columns[2:]  # 'Pclass', 'Name', 'Sex', 'Age', 'SibSp', 'Parch', 'Ticket', 'Fare', 'Cabin', 'Embarked'
             survived, persons = data[:, 1], make_persons(columns, data[:, 2:], include, replace)
         else:
             with open('data/gender_submission.csv', 'r') as gs:
-                columns = columns[1:]
+                columns = columns[1:]  # 'Pclass', 'Name', 'Sex', 'Age', 'SibSp', 'Parch', 'Ticket', 'Fare', 'Cabin', 'Embarked'
                 survived = list(map(lambda e:e[1], list(csv.reader(gs))[1:]))
 
                 persons = make_persons(columns, data[:, 1:], include, replace)
 
-        return Dataset(persons, survived, [], ['Survived', 'Died'])
+        return Dataset(persons, survived, include[1:], ['Survived', 'Died'])
 
 
 def test_prediction(valid_data, predicted):
@@ -66,6 +67,24 @@ def test_prediction(valid_data, predicted):
             errors += 1
 
     return (1 - errors/total) * 100, errors, total
+
+
+def viz(model, feature_names, target_names, name):
+    """
+    визуализация дерева http://scikit-learn.org/stable/modules/tree.html
+    :param model: модель DecisionTreeClassifier
+    :param feature_names: имена признаков
+    :param target_names: имена классов
+    """
+    dot_data = export_graphviz(model,
+                               out_file=None,
+                               feature_names=feature_names,
+                               class_names=target_names,
+                               filled=True,
+                               rounded=True,
+                               special_characters=True)
+    graph = graphviz.Source(dot_data)
+    graph.render(name)
 
 
 if __name__ == '__main__':
@@ -83,3 +102,6 @@ if __name__ == '__main__':
     survival_prediction = dt.predict(titanic_test.data)
 
     print('acc = {}%, {} errors, {} total.'.format(*test_prediction(titanic_test.target, survival_prediction)))
+
+    viz(dt, titanic_train.feature_names, titanic_train.target_names, "titanic.tmp")
+
