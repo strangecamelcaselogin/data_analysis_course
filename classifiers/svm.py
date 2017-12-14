@@ -15,4 +15,4 @@ if __name__ == '__main__':
 
     survival_prediction = m.predict(test.data)
 
-    print('acc = {}%, tested {} total.'.format((survival_prediction == test.target).mean(), len(survival_prediction)))
+    print('SVM: acc = {}%, tested {} total.'.format((survival_prediction == test.target).mean(), len(survival_prediction)))
