@@ -22,7 +22,7 @@ def open_idx_labels(labels_archive):
 
 
 if __name__ == '__main__':
-    mnist_path = r'./mnist/'
+    mnist_path = r'../data/mnist/'
     test_imgs = pathjoin(mnist_path, 't10k-images-idx3-ubyte.gz')
     test_labels = pathjoin(mnist_path, 't10k-labels-idx1-ubyte.gz')
 

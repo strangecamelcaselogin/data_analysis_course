@@ -50,8 +50,10 @@ if __name__ == '__main__':
     https://www.kaggle.com/c/titanic/data
     """
 
-    train = load_data('data/train.csv')
-    test = load_data('data/test.csv')
+    titanic_path = '../data/titanic/'
+
+    train = load_data(titanic_path + 'train.csv')
+    test = load_data(titanic_path + 'test.csv')
 
     dt = DecisionTreeClassifier(min_samples_split=10, random_state=0)
 
