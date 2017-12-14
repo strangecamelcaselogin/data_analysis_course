@@ -1,4 +1,4 @@
 .idea
 *.tmp*
-__pycache__/*
+__pycache__/
 report/
