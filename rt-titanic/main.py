@@ -27,7 +27,10 @@ def viz(model, feature_names, target_names, name):
     graph.render(name)
 
 
-def load_data(path: str):
+def load_data(path: str, complete_data=False):
+    """
+    Загрузим данные из csv, complete_data означает замену nan значений, а не удаление таких строк
+    """
     columns = ['Survived', 'Pclass', 'Sex', 'Age', 'Fare', 'Embarked']
 
     df = pd.read_csv(path)[columns]  # выберем нужные столбцы
@@ -35,6 +38,9 @@ def load_data(path: str):
     # заменим строки на числа
     df.Sex.replace({'male': 1, 'female': 0}, inplace=True)
     df.Embarked.replace({'C': 0, 'Q': 1, 'S': 2}, inplace=True)
+
+    if complete_data:
+        df.Age = df.Age.fillna(df.Age.median())  # замена не указанного возраста на среднее
 
     df = df[~df.isnull().any(axis=1)]  # уберем все строки, где есть 'nan'
 
@@ -52,8 +58,9 @@ if __name__ == '__main__':
 
     titanic_path = '../data/titanic/'
 
-    train = load_data(titanic_path + 'train.csv')
-    test = load_data(titanic_path + 'test.csv')
+    complete = True
+    train = load_data(titanic_path + 'train.csv', complete)
+    test = load_data(titanic_path + 'test.csv', complete)
 
     dt = DecisionTreeClassifier(min_samples_split=10, random_state=0)
 
