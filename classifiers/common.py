@@ -27,3 +27,12 @@ def load_data(path: str, complete_data=False):
     persons = df.iloc[:, 1:].as_matrix()
 
     return Dataset(persons, survived, columns[1:], ['Survived', 'Died'])
+
+
+titanic_path = '../data/titanic/'
+
+def load_train(complete):
+    return load_data(titanic_path + 'train.csv', complete)
+
+def load_test(complete):
+    return load_data(titanic_path + 'test.csv', complete)

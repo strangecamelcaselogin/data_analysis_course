@@ -1,14 +1,11 @@
 from sklearn.ensemble import RandomForestClassifier
 
-from common import load_data
-
+from common import load_train, load_test
 
 if __name__ == '__main__':
-    titanic_path = '../data/titanic/'
-
     complete = True
-    train = load_data(titanic_path + 'train.csv', complete)
-    test = load_data(titanic_path + 'test.csv', complete)
+    train = load_train(complete)
+    test = load_test(complete)
 
     m = RandomForestClassifier()
 

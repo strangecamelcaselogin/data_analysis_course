@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.naive_bayes import GaussianNB
 from sklearn.linear_model import LinearRegression
 
-from common import load_data
+from common import load_train, load_test
 
 
 def nb(train_data, test_data):
@@ -29,11 +29,9 @@ def lin_reg(train_data, test_data):
 
 
 if __name__ == '__main__':
-    titanic_path = '../data/titanic/'
-
     complete = True
-    train = load_data(titanic_path + 'train.csv', complete)
-    test = load_data(titanic_path + 'test.csv', complete)
+    train = load_train(complete)
+    test = load_test(complete)
 
     nb(train, test)
 

@@ -7,7 +7,7 @@ from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 
 import pandas as pd
 
-from common import load_data
+from common import load_train
 
 
 def pca_viz(dataset, res):
@@ -35,10 +35,8 @@ def lda_viz(dataset, res):
 
 
 def titanic():
-    titanic_path = '../data/titanic/'
-
-    complete = True
-    train = load_data(titanic_path + 'train.csv', complete)
+    complete = False
+    train = load_train(complete)
     # test = load_data(titanic_path + 'test.csv', complete)  # todo train + test
 
     pca = PCA(n_components=2)
