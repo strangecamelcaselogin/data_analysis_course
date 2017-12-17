@@ -36,7 +36,7 @@ def iris():
     c2 = y == 1
     c3 = y == 2
 
-    p = 35
+    p = 10
     X_emb = TSNE(n_components=2,
                  perplexity=p,
                  random_state=0,
@@ -55,4 +55,4 @@ def iris():
 
 if __name__ == '__main__':
     iris()
-    # titanic()
+    titanic()
