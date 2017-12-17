@@ -9,7 +9,7 @@ def load_data(path: str, complete_data=False):
     """
     Загрузим данные из csv, complete_data означает замену nan значений, а не удаление таких строк
     """
-    columns = ['Survived', 'Pclass', 'Sex', 'Age', 'Fare', 'Embarked']
+    columns = ['Survived', 'Pclass', 'Sex', 'Age', 'Fare', 'Embarked', 'SibSp', 'Parch']
 
     df = pd.read_csv(path)[columns]  # выберем нужные столбцы
 
