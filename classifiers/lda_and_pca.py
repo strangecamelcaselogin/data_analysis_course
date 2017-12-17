@@ -1,6 +1,7 @@
 import numpy as np
 
 import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
 
 from sklearn.decomposition import PCA
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
@@ -39,7 +40,6 @@ def lda_viz(y, X):
 def titanic():
     complete = False
     train = load_train(complete)
-    # test = load_data(titanic_path + 'test.csv', complete)  # todo train + test
 
     pca = PCA(n_components=2, random_state=0)
     pca_r = pca.fit_transform(train.data)
@@ -56,5 +56,28 @@ def titanic():
     plt.show()
 
 
+def iris():
+    dataset = load_iris()
+    X, y = dataset.data, dataset.target
+
+    pca = PCA(n_components=2, random_state=0)
+    X_emb = pca.fit_transform(X)
+
+    c1 = y == 0
+    c2 = y == 1
+    c3 = y == 2
+
+    plt.figure()
+    plt.title("PCA for Iris, samples={}".format(len(y)))
+
+    plt.scatter(X_emb[c1, 0], X_emb[c1, 1], c='g', marker='.', label='setosa')
+    plt.scatter(X_emb[c2, 0], X_emb[c2, 1], c='c', marker='.', label='versicolor')
+    plt.scatter(X_emb[c3, 0], X_emb[c3, 1], c='b', marker='.', label='virginica')
+
+    plt.legend(loc='best', shadow=False, scatterpoints=1)
+    plt.show()
+
+
 if __name__ == '__main__':
     titanic()
+    iris()
