@@ -1,16 +1,19 @@
-from sklearn import svm
+from sklearn.svm import SVC
 
-from common import load_train, load_test
+from common import Titanic
 
 
-if __name__ == '__main__':
+def main():
     complete = True
-    train = load_train(complete)
-    test = load_test(complete)
+    train, test = Titanic.load_train(complete), Titanic.load_test(complete)
 
-    m = svm.SVC()
+    m = SVC()
     m.fit(train.data, train.target)
 
     survival_prediction = m.predict(test.data)
 
-    print('SVM: acc = {}%, tested {} total.'.format((survival_prediction == test.target).mean(), len(survival_prediction)))
+    print('SVM: acc = {}%, tested {} total.'.format((survival_prediction == test.target).mean(),
+                                                    len(survival_prediction)))
+
+
+main()

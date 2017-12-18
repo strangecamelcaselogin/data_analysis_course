@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.naive_bayes import GaussianNB
 from sklearn.linear_model import LinearRegression
 
-from common import load_train, load_test
+from common import Titanic
 
 
 def nb(train_data, test_data):
@@ -28,11 +28,12 @@ def lin_reg(train_data, test_data):
                                                             len(survival_prediction)))
 
 
-if __name__ == '__main__':
+def main():
     complete = True
-    train = load_train(complete)
-    test = load_test(complete)
+    train, test = Titanic.load_train(complete), Titanic.load_test(complete)
 
     nb(train, test)
-
     lin_reg(train, test)
+
+
+main()

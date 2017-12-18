@@ -5,13 +5,14 @@ from sklearn.datasets import load_iris
 
 from sklearn.decomposition import PCA
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.svm import SVC
 
 import pandas as pd
 
-from common import load_train
+from common import Titanic
 
 
-def pca_viz(y, X):
+def pca_viz(X, y):
     plt.figure()
 
     s = y == 1
@@ -24,7 +25,7 @@ def pca_viz(y, X):
     plt.title('PCA for Titanic, persons={}'.format(len(y)))
 
 
-def lda_viz(y, X):
+def lda_viz(X, y):
     plt.figure()
 
     s = y == 1
@@ -37,22 +38,62 @@ def lda_viz(y, X):
     plt.title('LDA for Titanic, persons={}'.format(len(y)))
 
 
+def iris_pca_viz(X, y):
+    c1 = y == 0
+    c2 = y == 1
+    c3 = y == 2
+
+    plt.figure()
+    plt.title("PCA for Iris, samples={}".format(len(y)))
+
+    plt.scatter(X[c1, 0], X[c1, 1], c='g', marker='.', label='setosa')
+    plt.scatter(X[c2, 0], X[c2, 1], c='c', marker='.', label='versicolor')
+    plt.scatter(X[c3, 0], X[c3, 1], c='b', marker='.', label='virginica')
+
+    plt.legend(loc='best', shadow=False, scatterpoints=1)
+
+
 def titanic():
     complete = False
-    train = load_train(complete)
+    train = Titanic.load_train(complete)
+    test = Titanic.load_test(complete)
+    X, y = train.data, train.target
 
-    pca = PCA(n_components=2, random_state=0)
-    pca_r = pca.fit_transform(train.data)
+    train_pca = PCA(n_components=2, random_state=0)
+    train_pca_X = train_pca.fit_transform(X)
 
-    lda = LinearDiscriminantAnalysis(n_components=2)
-    lda_r = lda.fit_transform(train.data, train.target)
+    test_pca = PCA(n_components=2, random_state=0)
+    test_pca_X = test_pca.fit_transform(test.data)
+
+    m = SVC()
+    m.fit(train_pca_X, y)
+
+    survival_prediction = m.predict(test_pca_X)
 
     # Статистика
-    print('explained variance ratio (first two components): {}'.format(pca.explained_variance_ratio_))
-    print('Components_: \n', pd.DataFrame(pca.components_, ['PC1', 'PC2']))
+    print('Titanic PCA stats:')
+    print('explained variance ratio (first two components): {}'.format(train_pca.explained_variance_ratio_))
+    print('Components_: \n', pd.DataFrame(train_pca.components_, ['PC1', 'PC2']))
 
-    pca_viz(train.target, pca_r)
-    lda_viz(train.target, lda_r)
+    print('SVM for PCA data: acc = {}%, tested {} total.'.format((survival_prediction == test.target).mean(),
+                                                                 len(survival_prediction)))
+
+    train_lda = LinearDiscriminantAnalysis(n_components=2)
+    traind_lda_X = train_lda.fit_transform(X, y)
+
+    test_lda = LinearDiscriminantAnalysis(n_components=2)
+    test_lda_X = test_lda.fit_transform(test.data, test.target)
+
+    m = SVC()
+    m.fit(traind_lda_X, y)
+
+    survival_prediction = m.predict(test_lda_X)
+
+    print('SVM for LDA data: acc = {}%, tested {} total.'.format((survival_prediction == test.target).mean(),
+                                                                 len(survival_prediction)))
+
+    pca_viz(train_pca_X, y)
+    lda_viz(traind_lda_X, y)
     plt.show()
 
 
@@ -63,21 +104,10 @@ def iris():
     pca = PCA(n_components=2, random_state=0)
     X_emb = pca.fit_transform(X)
 
-    c1 = y == 0
-    c2 = y == 1
-    c3 = y == 2
+    iris_pca_viz(X_emb, y)
 
-    plt.figure()
-    plt.title("PCA for Iris, samples={}".format(len(y)))
-
-    plt.scatter(X_emb[c1, 0], X_emb[c1, 1], c='g', marker='.', label='setosa')
-    plt.scatter(X_emb[c2, 0], X_emb[c2, 1], c='c', marker='.', label='versicolor')
-    plt.scatter(X_emb[c3, 0], X_emb[c3, 1], c='b', marker='.', label='virginica')
-
-    plt.legend(loc='best', shadow=False, scatterpoints=1)
     plt.show()
 
 
-if __name__ == '__main__':
-    titanic()
-    iris()
+titanic()
+iris()
