@@ -2,7 +2,7 @@ import graphviz
 
 from sklearn.tree import DecisionTreeClassifier, export_graphviz
 
-from common import load_train, load_test
+from common import Titanic
 
 
 def dt_viz(model, feature_names, target_names, name):
@@ -23,14 +23,13 @@ def dt_viz(model, feature_names, target_names, name):
     graph.render(name)
 
 
-if __name__ == '__main__':
+def main():
     """
     https://www.kaggle.com/c/titanic/data
     """
 
     complete = True
-    train = load_train(complete)
-    test = load_test(complete)
+    train, test = Titanic.load_train(complete), Titanic.load_test(complete)
 
     dt = DecisionTreeClassifier(min_samples_split=10, random_state=0)
 
@@ -42,3 +41,5 @@ if __name__ == '__main__':
 
     dt_viz(dt, train.feature_names, train.target_names, "titanic.tmp")
 
+
+main()
