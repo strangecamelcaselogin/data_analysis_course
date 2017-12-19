@@ -29,7 +29,8 @@ def main():
     """
 
     complete = True
-    train, test = Titanic.load_train(complete), Titanic.load_test(complete)
+    titanic = Titanic('../data/titanic/')
+    train, test = titanic.load_train(complete), titanic.load_test(complete)
 
     dt = DecisionTreeClassifier(min_samples_split=10, random_state=0)
 

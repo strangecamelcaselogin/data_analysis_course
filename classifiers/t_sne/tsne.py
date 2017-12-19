@@ -3,10 +3,10 @@ import matplotlib.pyplot as plt
 from sklearn.datasets import load_iris
 from sklearn.manifold import TSNE
 
-from common import load_train
+from common import Titanic
 
 def titanic():
-    titanic_train = load_train(complete=False)
+    titanic_train = Titanic('../../data/titanic/').load_train(complete=False)
 
     X, y = titanic_train.data, titanic_train.target
     survived = y == 1

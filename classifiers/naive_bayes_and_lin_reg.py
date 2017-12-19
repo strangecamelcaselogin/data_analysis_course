@@ -30,7 +30,8 @@ def lin_reg(train_data, test_data):
 
 def main():
     complete = True
-    train, test = Titanic.load_train(complete), Titanic.load_test(complete)
+    titanic = Titanic('../data/titanic/')
+    train, test = titanic.load_train(complete), titanic.load_test(complete)
 
     nb(train, test)
     lin_reg(train, test)

@@ -3,7 +3,7 @@ from common import Titanic
 
 
 def model1(train, test, constant_params):
-    # два скрытых слоя в 30 и 10 нейрогов
+    # два скрытых слоя в 30 и 10 нейронов
     mlp = MLPClassifier(hidden_layer_sizes=(30, 10),
                         **constant_params)
 
@@ -47,7 +47,7 @@ def model3(train, test, constant_params):
         len(survival_prediction)))
 
 
-def mlp_classifier():
+def mlp_classifiers():
     """
     constant_params = {
         'random_state': 0,
@@ -61,8 +61,9 @@ def mlp_classifier():
     MLP - model3: acc = 0.9274924471299094 %, tested 331 total.
     """
     complete = False
-    train = Titanic.load_train(complete)
-    test = Titanic.load_test(complete)
+    titanic = Titanic('../data/titanic/')
+    train = titanic.load_train(complete)
+    test = titanic.load_test(complete)
 
     constant_params = {
         'random_state': 0,
@@ -79,4 +80,4 @@ def mlp_classifier():
     model3(train, test, constant_params)
 
 
-mlp_classifier()  # todo тоже самое для MNIST
+mlp_classifiers()  # todo тоже самое для MNIST

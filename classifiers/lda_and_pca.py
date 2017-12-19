@@ -53,10 +53,11 @@ def iris_pca_viz(X, y):
     plt.legend(loc='best', shadow=False, scatterpoints=1)
 
 
-def titanic():
+def titanic_lda_pca():
     complete = False
-    train = Titanic.load_train(complete)
-    test = Titanic.load_test(complete)
+    titanic = Titanic('../data/titanic/')
+    train = titanic.load_train(complete)
+    test = titanic.load_test(complete)
     X, y = train.data, train.target
 
     train_pca = PCA(n_components=2, random_state=0)
@@ -97,7 +98,7 @@ def titanic():
     plt.show()
 
 
-def iris():
+def iris_pca():
     dataset = load_iris()
     X, y = dataset.data, dataset.target
 
@@ -109,5 +110,5 @@ def iris():
     plt.show()
 
 
-titanic()
-iris()
+titanic_lda_pca()
+iris_pca()
