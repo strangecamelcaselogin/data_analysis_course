@@ -67,7 +67,7 @@ def titanic_lda_pca():
     test_pca_X = test_pca.fit_transform(test.data)
 
     m = SVC()
-    m.fit(train_pca_X, y)
+    m.fit(train_pca_X, y)  # todo bokeh https://bokeh.pydata.org/en/latest/docs/gallery.html
 
     survival_prediction = m.predict(test_pca_X)
 

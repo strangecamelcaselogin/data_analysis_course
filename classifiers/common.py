@@ -17,6 +17,8 @@ class DataSet:
         self.target_names = target_names #  if target_names else []
 
 
+# todo http://www.ritchieng.com/machinelearning-one-hot-encoding/
+
 class Titanic:
     def __init__(self, path):
         self.path = path
