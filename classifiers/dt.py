@@ -32,7 +32,10 @@ def main():
     titanic = Titanic('../data/titanic/')
     train, test = titanic.load_train(complete), titanic.load_test(complete)
 
-    dt = DecisionTreeClassifier(min_samples_split=10, random_state=0)
+    dt = DecisionTreeClassifier(random_state=0,
+                                max_depth=4,
+                                min_samples_split=25,
+                                min_samples_leaf=10)
 
     dt.fit(train.data, train.target)
 

@@ -8,7 +8,9 @@ def main():
     titanic = Titanic('../data/titanic/')
     train, test = titanic.load_train(complete), titanic.load_test(complete)
 
-    m = SVC()
+    m = SVC(random_state=0,
+            kernel='rbf',
+            C=3)
     m.fit(train.data, train.target)
 
     survival_prediction = m.predict(test.data)

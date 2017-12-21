@@ -5,6 +5,7 @@ from sklearn.datasets import load_iris
 
 from sklearn.decomposition import PCA
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
 
 import pandas as pd
@@ -66,7 +67,7 @@ def titanic_lda_pca():
     test_pca = PCA(n_components=2, random_state=0)
     test_pca_X = test_pca.fit_transform(test.data)
 
-    m = SVC()
+    m = RandomForestClassifier(random_state=0, max_depth=4, min_samples_split=25, min_samples_leaf=10)
     m.fit(train_pca_X, y)  # todo bokeh https://bokeh.pydata.org/en/latest/docs/gallery.html
 
     survival_prediction = m.predict(test_pca_X)
@@ -76,7 +77,7 @@ def titanic_lda_pca():
     print('explained variance ratio (first two components): {}'.format(train_pca.explained_variance_ratio_))
     print('Components_: \n', pd.DataFrame(train_pca.components_, ['PC1', 'PC2']))
 
-    print('SVM for PCA data: acc = {}%, tested {} total.'.format((survival_prediction == test.target).mean(),
+    print('RF for PCA data: acc = {}%, tested {} total.'.format((survival_prediction == test.target).mean(),
                                                                  len(survival_prediction)))
 
     train_lda = LinearDiscriminantAnalysis(n_components=2)
@@ -85,12 +86,12 @@ def titanic_lda_pca():
     test_lda = LinearDiscriminantAnalysis(n_components=2)
     test_lda_X = test_lda.fit_transform(test.data, test.target)
 
-    m = SVC()
+    m = RandomForestClassifier(random_state=0, max_depth=4, min_samples_split=25, min_samples_leaf=10)
     m.fit(traind_lda_X, y)
 
     survival_prediction = m.predict(test_lda_X)
 
-    print('SVM for LDA data: acc = {}%, tested {} total.'.format((survival_prediction == test.target).mean(),
+    print('RF for LDA data: acc = {}%, tested {} total.'.format((survival_prediction == test.target).mean(),
                                                                  len(survival_prediction)))
 
     pca_viz(train_pca_X, y)
