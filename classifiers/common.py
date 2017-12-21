@@ -1,4 +1,4 @@
-from os.path import join as pathjoin
+import os.path as osp
 import gzip
 from struct import unpack
 
@@ -24,10 +24,10 @@ class Titanic:
         self.path = path
 
     def load_train(self, complete):
-        return self._load_data(pathjoin(self.path, 'train.csv'), complete)
+        return self._load_data(osp.join(self.path, 'train.csv'), complete)
 
     def load_test(self, complete):
-        return self._load_data(pathjoin(self.path, 'test.csv'), complete)
+        return self._load_data(osp.join(self.path, 'test.csv'), complete)
 
     @staticmethod
     def _load_data(path: str, complete_data=False):
@@ -58,6 +58,25 @@ class MNIST:
     def __init__(self, path):
         self.path = path
 
+    def load_test(self):
+        test_imgs = osp.join(self.path, 't10k-images-idx3-ubyte.gz')
+        test_labels = osp.join(self.path, 't10k-labels-idx1-ubyte.gz')
+
+        return self._load_data(test_imgs, test_labels)
+
+    def load_train(self):
+        train_imgs = osp.join(self.path, 'train-images-idx3-ubyte.gz')
+        train_labels = osp.join(self.path, 'train-labels-idx1-ubyte.gz')
+
+        return self._load_data(train_imgs, train_labels)
+
+    def _load_data(self, path_imgs, path_labels):
+        images = self._open_idx_images(path_imgs)
+        labels = self._open_idx_labels(path_labels)
+
+        return DataSet(data=images, target=labels, feature_names=[str(i) for i in range(784)],
+                       target_names=[str(i) for i in range(10)])
+
     @staticmethod
     def _open_idx_images(images_archive):
         with gzip.open(images_archive) as byte_stream:
@@ -73,22 +92,3 @@ class MNIST:
             _, total_count = unpack('>II', byte_stream.read(2 * 4))
 
             return unpack('>{}B'.format(total_count), byte_stream.read(total_count))
-
-    def load_test(self):
-        test_imgs = pathjoin(self.path, 't10k-images-idx3-ubyte.gz')
-        test_labels = pathjoin(self.path, 't10k-labels-idx1-ubyte.gz')
-
-        images = self._open_idx_images(test_imgs)
-        labels = self._open_idx_labels(test_labels)
-
-        return DataSet(data=images, target=labels, feature_names=[str(i) for i in range(784)], target_names=[str(i) for i in range(10)])
-
-    def load_train(self):
-        train_imgs = pathjoin(self.path, 'train-images-idx3-ubyte.gz')
-        train_labels = pathjoin(self.path, 'train-labels-idx1-ubyte.gz')
-
-        images = self._open_idx_images(train_imgs)
-        labels = self._open_idx_labels(train_labels)
-
-        return DataSet(data=images, target=labels, feature_names=[str(i) for i in range(784)],
-                       target_names=[str(i) for i in range(10)])
