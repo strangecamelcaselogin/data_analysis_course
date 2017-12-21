@@ -61,6 +61,7 @@ def titanic_lda_pca():
     test = titanic.load_test(complete)
     X, y = train.data, train.target
 
+    # todo join train + test -> PCA -> split again
     train_pca = PCA(n_components=2, random_state=0)
     train_pca_X = train_pca.fit_transform(X)
 
