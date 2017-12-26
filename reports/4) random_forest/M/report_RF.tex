@@ -217,7 +217,7 @@
 	Бибилотека pandas была использована для подготовки датасета к будущему использованию.
 	
 	\vspace{0.5cm}
-	Библиотека Sсikit-learn была использована для построения дерева решений. Для этого использовалась функция RandomForestClassifier. 
+	Библиотека Sсikit-learn была использована для построения дерева решений. Для этого использовался класс RandomForestClassifier из sklearn.ensemble. 
 	
 	\vspace{0.5cm}
 	Основные параметры класса sklearn.ensemble.RandomForestClassifier.
@@ -242,9 +242,7 @@
 	Для того, чтобы вывести при каких параметрах функция RandomForestClassifier дает наиболее точное предсказание, необходимо провести ряд экспериментов с разными значениями параметров. 
 	
 	\vspace{0.5cm}
-	Рядом экспериментов было выявлено, что наилучшая точность достигается при random\_state равном 5-ти. Поэтому примем данный параметр равным пяти во всех экспериментах.
-	
-	\\Еще не доделано
+	Основываясь на экспериментах из первой лабораторной работы, можно положить, что наилучшие результаты будут достигнуты, при высоких значениях min\_samples\_leaf и min\_samples\_split, поэтому примем их равными 15 и 40 соотвественно.
 	
 	\vspace{0.5cm}
 	Таблица 1 - Точность предстказаний в зависимости от параметров.
@@ -252,61 +250,34 @@
 \hline
 № & Параметры & Точность (в процентах) \\ 
 \hline 
-1 & Параметры по умолчанию & 77.039 \\
+1 & Параметры по умолчанию & 84.29 \\
 \hline
-2 & max\_depth=10; max\_features=2; min\_samples\_split=10; min\_samples\_leaf=50; & 100.0 \\
+2 & max\_depth=15; max\_features=2; n\_estimators=13 & 85.196 \\
 \hline 
-3 & max\_depth=10; max\_features=2; min\_samples\_split=40; min\_samples\_leaf=10; & 91.843 \\
+3 & max\_depth=10; max\_features=2; n\_estimators=5 & 91.238 \\
 \hline 
-4 & max\_depth=10; max\_features=3; min\_samples\_split=2; min\_samples\_leaf=1; & 80.664 \\
+4 & max\_depth=15; max\_features=2; n\_estimators=2 & 84.894 \\
 \hline 
-5 & max\_depth=10; max\_features=5; min\_samples\_split=2; min\_samples\_leaf=1; & 81.873 \\
+5 & max\_depth=15; max\_features=3; n\_estimators=13 & 92.749 \\
 \hline
-6 & max\_depth=10; max\_features=5; min\_samples\_split=50; min\_samples\_leaf=10; & 87.311 \\
+6 & max\_depth=10; max\_features=3; n\_estimators=5 & 87.915 \\
 \hline  
-7 & max\_depth=10, max\_features=5; min\_samples\_split=10; min\_samples\_leaf=50; & 88.822 \\
+7 & max\_depth=15, max\_features=3; n\_estimators=2 & 83.686 \\
 \hline
-8 & max\_depth=100, max\_features=2; min\_samples\_split=10; min\_samples\_leaf=50; & 100.0 \\
+8 & max\_depth=15, max\_features=5; n\_estimators=13 & 87.009\\
 \hline 
-9 & max\_depth=100, max\_features=2; min\_samples\_split=10; min\_samples\_leaf=50; & 95.166 \\
+9 & max\_depth=10, max\_features=5; n\_estimators=5 & 87.915 \\
 \hline
-10 & max\_depth=100, max\_features=3; min\_samples\_split=2; min\_samples\_leaf=1; & 77.64 \\
-\hline
-11 & max\_depth=100, max\_features=5; min\_samples\_split=2; min\_samples\_leaf=1; & 77.34 \\
-\hline
-12 & max\_depth=100, max\_features=5; min\_samples\_split=50; min\_samples\_leaf=10; & 87.311 \\
-\hline
-13 & max\_depth=100, max\_features=5; min\_samples\_split=10; min\_samples\_leaf=50; & 88.822 \\
-\hline 
-14 & max\_depth=5; max\_features=2; min\_samples\_split=10; min\_samples\_leaf=50; & 100.0 \\
-\hline 
-15 & max\_depth=5; max\_features=2; min\_samples\_split=40; min\_samples\_leaf=10;  & 97.28 \\
-\hline 
-16 & max\_depth=5, max\_features=3; min\_samples\_split=2; min\_samples\_leaf=1; & 95.77 \\
-\hline
-17 & max\_depth=5, max\_features=5; min\_samples\_split=2; min\_samples\_leaf=1; & 94.562 \\
-\hline
-18 & max\_depth=5; max\_features=5; min\_samples\_split=50; min\_samples\_leaf=10;  & 87.311 \\
-\hline
-19 & max\_depth=5, max\_features=5; min\_samples\_split=10; min\_samples\_leaf=50; & 88.822 \\
-\hline 
-
-
+10 & max\_depth=15, max\_features=5; n\_estimators=2 & 91.541 \\
 \hline
 \end{longtable}
 
 
 \newpage\section{Итог}
-	В ходе проведения экперименты были выявлены наиболее оптимальные сочетания основных параметров функции DecisionTreeClassifier из Skikit-learn. При минимальном количестве экземпляров в листе во всех трех группах получались наиболее слабые результаты. Исходя их того, что наихудшие данные были получены при максимальной глубине дерева, можно сделать вывод, что вероятно произошло переобучение модели, вследствии таких ограничений. 
+	В ходе проведения экперименты были выявлены наиболее оптимальные сочетания основных параметров модели RandomForestClassifier из scikit-learn. Были получены хорошие результаты прогнозов, во всех проведенных экспериментах. Наиболее слабым себя показало сочетание минимального количества деревьев и среднего числа признаков. При этом глубина дерева ни в одном из экспериментов, не была на много увеличена, чтобы не вызвать переобучения. 
 	
 	\vspace{0.5cm}
-	Лучшие результаты были получены при минимальном количестве экземпрляров в листе, равном 50. При этом, глубина дерева не оказывала значительного влиния. Лучшие результаты были достигунты при использовании малого числа признаков. 
-	
-	\vspace{0.5cm}
-	При этом также, хорошие результаты показали эксперименты с наименьшей глубиной дерева (равной 5).
-	
-	\vspace{0.5cm}
-	В итоге, можно сделать вывод, что для используемого набора данных, при допускании большой глубины дерева и самого малого из возможных числа экземпляров в листе, результаты ухудшаются, что может свидетельствовать о переобучении модели.
+	В итоге, можно сделать вывод, что модель случайного леса дает хорошие результаты для используемого набора данных. Исходя из полученных результатов нельзя сделать точных выводов о зависимости связки тех или иных параметров на результат.
 	
 	
 \end{document}
