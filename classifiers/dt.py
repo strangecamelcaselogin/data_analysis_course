@@ -1,5 +1,6 @@
 import graphviz
 
+import numpy as np
 from sklearn.tree import DecisionTreeClassifier, export_graphviz
 
 from common import Titanic
@@ -28,22 +29,68 @@ def main():
     https://www.kaggle.com/c/titanic/data
     """
 
-    complete = True
+    complete = False
     titanic = Titanic('../data/titanic/')
     train, test = titanic.load_train(complete), titanic.load_test(complete)
 
-    dt = DecisionTreeClassifier(random_state=0,
-                                max_depth=4,
-                                min_samples_split=25,
-                                min_samples_leaf=10)
 
-    dt.fit(train.data, train.target)
+    params = [
+        # 1
+        {},
+        # 2
+        {
+            "max_depth": 10,
+            "min_samples_split": 10,
+            "min_samples_leaf": 50,
+            "max_features": 2
+        },
+        # 3
+        {
+            "max_depth": 4,
+            "min_samples_split": 10,
+            "min_samples_leaf": 50,
+            "max_features": 3
+        },
+        # 4
+        {
+            "max_depth": 10,
+            "min_samples_split": 40,
+            "min_samples_leaf": 10,
+            "max_features": 2
+        },
+        # 5
+        {
+            "max_depth": 10,
+            "min_samples_split": 2,
+            "min_samples_leaf": 1,
+            "max_features": 3
+        },
+        # 6
+        {
+            "max_depth": 10,
+            "min_samples_split": 25,
+            "min_samples_leaf": 10,
+            "max_features": None
+        },
+        # 7
+        {
+            "max_depth": 10,
+            "min_samples_split": 25,
+            "min_samples_leaf": 10,
+            "max_features": 6
+        },
+    ]
 
-    survival_prediction = dt.predict(test.data)
+    for i, p in enumerate(params):
+        dt = DecisionTreeClassifier(random_state=5, **p)
 
-    print('DT: acc = {}%, tested {} total.'.format((survival_prediction == test.target).mean(), len(survival_prediction)))
+        dt.fit(train.data, train.target)
 
-    dt_viz(dt, train.feature_names, train.target_names, "titanic.tmp")
+        survival_prediction = dt.predict(test.data)
+
+        print('DT {}: acc = {}%, tested {} total.'.format(i+1, np.round((survival_prediction == test.target).mean(), 4) * 100, len(survival_prediction)))
+
+        dt_viz(dt, train.feature_names, train.target_names, "dt_titanic_{}_model.tmp".format(i+1))
 
 
 main()
