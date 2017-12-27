@@ -39,12 +39,37 @@ def regressions(train_data, test_data):
     print('Linear Regression: acc = {}%, tested {} total.'.format((survival_prediction == test_data.target).mean(),
                                                             len(survival_prediction)))
 
-    m = LogisticRegression(random_state=0)
-    m.fit(train_data.data, train_data.target)
-    survival_prediction = np.round(m.predict(test_data.data))  # round потому что возвращает float
+    params = [
+        #1
+        {},
+        #2
+        {
+            'C': 1,
+            'tol': 1e-3
+        },
+        #3
+        {
+            'C': 1,
+            'tol': 1e-1
+        },
+        #4
+        {
+            'C': 3,
+            'tol': 1e-3
+        },
+        #5
+        {
+            'C': 0.5,
+            'tol': 1e-3
+        }
+    ]
+    for i, p in enumerate(params):
+        m = LogisticRegression(random_state=0, **p)
+        m.fit(train_data.data, train_data.target)
+        survival_prediction = np.round(m.predict(test_data.data))  # round потому что возвращает float
 
-    print('Logistic Regression: acc = {}%, tested {} total.'.format((survival_prediction == test_data.target).mean(),
-                                                                  len(survival_prediction)))
+        print('Logistic Regression {}: acc = {}%, tested {} total.'.format(i+1, np.round((survival_prediction == test_data.target).mean(), 4) * 100,
+                                                                      len(survival_prediction)))
 
 
 def main():
