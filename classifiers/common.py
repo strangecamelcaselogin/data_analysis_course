@@ -58,33 +58,40 @@ class MNIST:
     def __init__(self, path):
         self.path = path
 
-    def load_test(self):
+    def load_test(self, as_vectors=False, zero_to_one_data=False):
         test_imgs = osp.join(self.path, 't10k-images-idx3-ubyte.gz')
         test_labels = osp.join(self.path, 't10k-labels-idx1-ubyte.gz')
 
-        return self._load_data(test_imgs, test_labels)
+        return self._load_data(test_imgs, test_labels, as_vectors, zero_to_one_data)
 
-    def load_train(self):
+    def load_train(self, as_vectors=False, zero_to_one_data=False):
         train_imgs = osp.join(self.path, 'train-images-idx3-ubyte.gz')
         train_labels = osp.join(self.path, 'train-labels-idx1-ubyte.gz')
 
-        return self._load_data(train_imgs, train_labels)
+        return self._load_data(train_imgs, train_labels, as_vectors, zero_to_one_data)
 
-    def _load_data(self, path_imgs, path_labels):
-        images = self._open_idx_images(path_imgs)
+    def _load_data(self, path_imgs, path_labels, as_vectors, zero_to_one_data):
+        images = self._open_idx_images(path_imgs, as_vectors)
         labels = self._open_idx_labels(path_labels)
+
+        if zero_to_one_data:
+            images = images / 255.0
 
         return DataSet(data=images, target=labels, feature_names=[str(i) for i in range(784)],
                        target_names=[str(i) for i in range(10)])
 
     @staticmethod
-    def _open_idx_images(images_archive):
+    def _open_idx_images(images_archive, as_vectors):
         with gzip.open(images_archive) as byte_stream:
             _, total_count, width, height = unpack('>IIII', byte_stream.read(4 * 4))
 
             stream_len = total_count * width * height
-            return (np.array(unpack('>{}B'.format(stream_len), byte_stream.read(stream_len)), dtype=np.ubyte)
-                .reshape(total_count, width, height))
+            data = np.array(unpack('>{}B'.format(stream_len), byte_stream.read(stream_len)), dtype=np.ubyte)
+
+            if as_vectors:
+                return data.reshape(total_count, width * height)
+            else:
+                return data.reshape(total_count, width, height)
 
     @staticmethod
     def _open_idx_labels(labels_archive):
