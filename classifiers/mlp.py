@@ -1,5 +1,5 @@
 from sklearn.neural_network import MLPClassifier
-from common import Titanic
+from common import Titanic, MNIST
 
 
 def model1(train, test, constant_params):
@@ -47,7 +47,7 @@ def model3(train, test, constant_params):
         len(survival_prediction)))
 
 
-def mlp_classifiers():
+def mlp_titanic():
     """
     constant_params = {
         'random_state': 0,
@@ -80,4 +80,27 @@ def mlp_classifiers():
     model3(train, test, constant_params)
 
 
-mlp_classifiers()  # todo тоже самое для MNIST
+def mlp_mnist():
+    complete = False
+    mnist = MNIST('../data/mnist/')
+    train = mnist.load_train(as_vectors=True, zero_to_one_data=True)
+    test = mnist.load_test(as_vectors=True, zero_to_one_data=True)
+
+    constant_params = {
+        'random_state': 0,
+        'solver': 'lbfgs',
+        'early_stopping': False,
+        'learning_rate': 'invscaling',
+        'learning_rate_init': 0.001,
+        'max_iter': 1000,
+        'activation': 'relu',
+        'verbose': True
+    }
+
+    print('MNIST learning start')
+
+    model1(train, test, constant_params)
+
+
+mlp_titanic()
+mlp_mnist()
